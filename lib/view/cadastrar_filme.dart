@@ -1,10 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter/services.dart'; // Importante para FilteringTextInputFormatter
 import 'package:teste/models/filme.dart';
 import 'package:teste/services/filme_service.dart';
 
 class CadastrarFilme extends StatefulWidget {
-
   @override
   State<CadastrarFilme> createState() => _CadastrarFilmeState();
 }
@@ -13,21 +14,25 @@ class _CadastrarFilmeState extends State<CadastrarFilme> {
   final TextEditingController _urlDaImagem = TextEditingController();
   final TextEditingController _tituloController = TextEditingController();
   final TextEditingController _generoController = TextEditingController();
+  final TextEditingController _anoController = TextEditingController();
+  final TextEditingController _descricaoController = TextEditingController();
+  final TextEditingController _duracaoController = TextEditingController();
   String _selectedClassificacao = 'Livre';
+  double _rating = 3.0;
 
   var _filmeService = FilmeService();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            "Cadastrar Filme",
-            style: TextStyle(color: Colors.white),
-          ),
-          backgroundColor: Colors.blue,
+      appBar: AppBar(
+        title: const Text(
+          "Cadastrar Filme",
+          style: TextStyle(color: Colors.white),
         ),
-      body: Padding(
+        backgroundColor: Colors.blue,
+      ),
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
@@ -58,40 +63,102 @@ class _CadastrarFilmeState extends State<CadastrarFilme> {
             ),
 
             SizedBox(height: 16.0),
+            TextField(
+              controller: _duracaoController,
+              decoration: InputDecoration(
+                labelText: 'Duração',
+                border: OutlineInputBorder(),
+              ),
+              keyboardType: TextInputType.number,
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter.digitsOnly
+              ],
+            ),
+
+            SizedBox(height: 16.0),
             Row(
               children: [
                 Text("Faixa etária"),
                 SizedBox(width: 16.0), // Espaço de 16 pixels
-                DropdownButton<String>(
-                  value: _selectedClassificacao,
-                  items: <String>['Livre', '10', '12', '14', '16', '18']
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      _selectedClassificacao = newValue!;
-                    });
-                  },
+                Expanded(
+                  child: DropdownButton<String>(
+                    value: _selectedClassificacao,
+                    isExpanded: true, // Adiciona esta linha para expandir o dropdown
+                    items: <String>['Livre', '10', '12', '14', '16', '18']
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _selectedClassificacao = newValue!;
+                      });
+                    },
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 16.0),
+            Row(
+              children: [
+                Text("Nota: "),
+                Expanded(
+                  child: RatingBar.builder(
+                    initialRating: _rating,
+                    minRating: 1,
+                    direction: Axis.horizontal,
+                    allowHalfRating: true,
+                    itemCount: 5,
+                    itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                    itemBuilder: (context, _) => Icon(
+                      Icons.star,
+                      color: Colors.amber,
+                    ),
+                    onRatingUpdate: (rating) {
+                      setState(() {
+                        _rating = rating;
+                      });
+                    },
+                  ),
                 ),
               ],
             ),
 
-            Spacer(),
+            SizedBox(height: 16.0),
+            TextField(
+              controller: _anoController,
+              decoration: InputDecoration(
+                labelText: 'Ano',
+                border: OutlineInputBorder(),
+              ),
+              keyboardType: TextInputType.number,
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter.digitsOnly
+              ],
+            ),
+
+            SizedBox(height: 16.0),
+            TextField(
+              controller: _descricaoController,
+              decoration: InputDecoration(
+                labelText: 'Descricao',
+                border: OutlineInputBorder(),
+              ),
+            ),
+
+            SizedBox(height: 16.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context)
-                        .pop();
+                    Navigator.of(context).pop();
                   },
-                  child: Text('Cancelar',),
+                  child: Text('Cancelar'),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red, // Red color for cancel button
+                    backgroundColor: Colors.red, // Cor vermelha para o botão de cancelar
                   ),
                 ),
                 ElevatedButton(
@@ -101,6 +168,8 @@ class _CadastrarFilmeState extends State<CadastrarFilme> {
                       urlFilme: _urlDaImagem.text,
                       genero: _generoController.text,
                       faixaEtaria: _selectedClassificacao,
+                     //rating: _rating,
+                     // ano: _selectedAno ?? _anoController.text,
                     );
 
                     var result = await _filmeService.salvarFilme(filme);
@@ -129,7 +198,7 @@ class _CadastrarFilmeState extends State<CadastrarFilme> {
                   child: Text('Cadastrar'),
                 ),
               ],
-            )
+            ),
           ],
         ),
       ),
