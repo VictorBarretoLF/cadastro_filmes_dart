@@ -24,9 +24,6 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       _filmesList = filmes;
     });
-    filmes.forEach((filme) {
-      print('ID: ${filme.id}, URL: ${filme.urlFilme}, Título: ${filme.titulo}, Gênero: ${filme.genero}, Faixa Etária: ${filme.faixaEtaria}');
-    });
   }
 
   _deleteFilme(int? id) async {
@@ -152,9 +149,10 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => CadastrarFilme()))
+        onPressed: () async {
+          await Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => CadastrarFilme()));
+          await getAllFilmes();
         },
         child: Icon(Icons.add),
       ),
