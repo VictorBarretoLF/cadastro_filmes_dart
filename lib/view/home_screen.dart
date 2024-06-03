@@ -35,13 +35,45 @@ class _HomeScreenState extends State<HomeScreen> {
     print(id);
   }
 
+  void _showInfoDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Equipe:'),
+          content: Text('Victor Barreto'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "Catalogo Filmes",
-          style: TextStyle(color: Colors.white),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              "Catalogo Filmes",
+              style: TextStyle(color: Colors.white),
+            ),
+            IconButton(
+              icon: Icon(Icons.info_outline, color: Colors.white),
+              onPressed: () {
+                print('Info ícone clicado');
+                _showInfoDialog();
+              },
+            ),
+          ],
         ),
         backgroundColor: Colors.blue,
       ),

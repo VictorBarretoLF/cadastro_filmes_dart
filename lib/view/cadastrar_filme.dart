@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:flutter/services.dart'; // Importante para FilteringTextInputFormatter
+import 'package:flutter/services.dart';
 import 'package:teste/models/filme.dart';
 import 'package:teste/services/filme_service.dart';
 
