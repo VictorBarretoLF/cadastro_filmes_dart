@@ -24,4 +24,9 @@ class Repository {
     return await connection.query(table);
   }
 
+  Future<int> deleteData(String table, int id) async {
+    var connection = await database;
+    return await connection.delete(table, where: 'id = ?', whereArgs: [id]);
+  }
+
 }

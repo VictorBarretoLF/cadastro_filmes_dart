@@ -28,8 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   _deleteFilme(int? id) async {
     if(id == null) return;
-    print("deletando item");
-    print(id);
+    _filmesService.deletarFilme(id);
   }
 
   void _showInfoDialog() {

@@ -13,4 +13,8 @@ class FilmeService {
     return filmesMap.map((map) => Filme.fromMap(map)).toList();
   }
 
+  Future<void> deletarFilme(int id) async {
+    await _repository.deleteData("filmes", id);
+  }
+
 }
