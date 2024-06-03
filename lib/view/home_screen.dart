@@ -31,6 +31,32 @@ class _HomeScreenState extends State<HomeScreen> {
     _filmesService.deletarFilme(id);
   }
 
+  void _showOptionsMenu(BuildContext context, Filme filme) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Wrap(
+          children: <Widget>[
+            ListTile(
+              leading: Icon(Icons.info),
+              title: Text('Exibir Dados'),
+              onTap: () {
+                print("exibir dados ${filme.id}");
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.edit),
+              title: Text('Alterar'),
+              onTap: () {
+                print("alterar dados ${filme.id}");
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void _showInfoDialog() {
     showDialog(
       context: context,
@@ -94,6 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: GestureDetector(
                 onTap: () {
                   print('CLICADO EM ID: ${filme.id}');
+                  _showOptionsMenu(context, filme);
                 },
                 child: Card(
                   child: ListTile(
