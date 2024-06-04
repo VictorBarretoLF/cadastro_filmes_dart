@@ -17,4 +17,9 @@ class FilmeService {
     await _repository.deleteData("filmes", id);
   }
 
+  Future<Filme> getFilmeById(int id) async {
+    final List<Map<String, dynamic>> filmeMap = await _repository.readDataById('filmes', id);
+    return Filme.fromMap(filmeMap.first);
+  }
+
 }

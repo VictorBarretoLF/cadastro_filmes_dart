@@ -29,4 +29,9 @@ class Repository {
     return await connection.delete(table, where: 'id = ?', whereArgs: [id]);
   }
 
+  Future<List<Map<String, dynamic>>> readDataById(String table, int id) async {
+    var connection = await database;
+    return await connection.query(table, where: 'id = ?', whereArgs: [id]);
+  }
+
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:teste/models/filme.dart';
 import 'package:teste/services/filme_service.dart';
 import 'package:teste/view/cadastrar_filme.dart';
+import 'package:teste/view/filme_detalhes.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -41,7 +42,12 @@ class _HomeScreenState extends State<HomeScreen> {
               leading: Icon(Icons.info),
               title: Text('Exibir Dados'),
               onTap: () {
-                print("exibir dados ${filme.id}");
+                Navigator.of(context).pop();
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => FilmeDetalhes(filmeId: filme.id!),
+                  ),
+                );
               },
             ),
             ListTile(
