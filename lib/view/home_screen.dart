@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:teste/models/filme.dart';
 import 'package:teste/services/filme_service.dart';
+import 'package:teste/view/atualizar_filme.dart';
 import 'package:teste/view/cadastrar_filme.dart';
 import 'package:teste/view/filme_detalhes.dart';
 
@@ -54,7 +55,12 @@ class _HomeScreenState extends State<HomeScreen> {
               leading: Icon(Icons.edit),
               title: Text('Alterar'),
               onTap: () {
-                print("alterar dados ${filme.id}");
+                Navigator.of(context).pop();
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => AtualizarFilme(filmeId: filme.id!),
+                  ),
+                );
               },
             ),
           ],

@@ -6,6 +6,8 @@ class Filme {
   String faixaEtaria;
   double rating;
   String ano;
+  String descricao;
+  String duracao;
 
   Filme({
     this.id,
@@ -14,7 +16,9 @@ class Filme {
     required this.genero,
     required this.faixaEtaria,
     required this.rating,
-    required this.ano
+    required this.ano,
+    required this.descricao,
+    required this.duracao
   });
 
   factory Filme.fromMap(Map<String, dynamic> map) {
@@ -26,6 +30,8 @@ class Filme {
       faixaEtaria: map['faixaEtaria'],
       rating: map['rating'],
       ano: map['ano'],
+      descricao: map['descricao'],
+      duracao: map['duracao'],
     );
   }
 
@@ -36,7 +42,9 @@ class Filme {
       'genero': genero,
       'faixaEtaria': faixaEtaria,
       'rating': rating,
-      'ano': ano
+      'ano': ano,
+      'descricao': descricao,
+      'duracao': duracao,
     };
     if (id != null) {
       map['id'] = id;

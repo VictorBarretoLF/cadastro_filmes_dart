@@ -22,4 +22,8 @@ class FilmeService {
     return Filme.fromMap(filmeMap.first);
   }
 
+  Future<int> atualizarFilme(Filme filme) async {
+    return await _repository.updateData('filmes', filme.toMap(), filme.id!);
+  }
+
 }

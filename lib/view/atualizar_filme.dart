@@ -4,12 +4,16 @@ import 'package:flutter/services.dart';
 import 'package:teste/models/filme.dart';
 import 'package:teste/services/filme_service.dart';
 
-class CadastrarFilme extends StatefulWidget {
+class AtualizarFilme extends StatefulWidget {
+  final int filmeId;
+
+  AtualizarFilme({required this.filmeId});
+
   @override
-  State<CadastrarFilme> createState() => _CadastrarFilmeState();
+  _AtualizarFilmeState createState() => _AtualizarFilmeState();
 }
 
-class _CadastrarFilmeState extends State<CadastrarFilme> {
+class _AtualizarFilmeState extends State<AtualizarFilme> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _urlDaImagem = TextEditingController();
   final TextEditingController _tituloController = TextEditingController();
@@ -21,18 +25,81 @@ class _CadastrarFilmeState extends State<CadastrarFilme> {
   double _rating = 3.0;
 
   var _filmeService = FilmeService();
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchFilmeDetails();
+  }
+
+  _fetchFilmeDetails() async {
+    var filme = await _filmeService.getFilmeById(widget.filmeId);
+    setState(() {
+      _urlDaImagem.text = filme.urlFilme;
+      _tituloController.text = filme.titulo;
+      _generoController.text = filme.genero;
+      _anoController.text = filme.ano;
+      _selectedClassificacao = filme.faixaEtaria;
+      _rating = filme.rating;
+      _duracaoController.text = filme.duracao;
+      _descricaoController.text = filme.descricao;
+      _isLoading = false;
+    });
+  }
+
+  _atualizarFilme() async {
+    if (_formKey.currentState!.validate()) {
+      var filme = Filme(
+        id: widget.filmeId,
+        titulo: _tituloController.text,
+        urlFilme: _urlDaImagem.text,
+        genero: _generoController.text,
+        faixaEtaria: _selectedClassificacao,
+        rating: _rating,
+        ano: _anoController.text,
+        descricao: _descricaoController.text,
+        duracao: _duracaoController.text,
+      );
+
+      var result = await _filmeService.atualizarFilme(filme);
+      if (result != null) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("Sucesso"),
+              content: Text("O filme foi atualizado com sucesso!"),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text("OK"),
+                ),
+              ],
+            );
+          },
+        ).then((value) {
+          Navigator.of(context).pop();
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "Cadastrar Filme",
+          "Atualizar Filme",
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Colors.blue,
       ),
-      body: SingleChildScrollView(
+      body: _isLoading
+          ? Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
@@ -196,44 +263,8 @@ class _CadastrarFilmeState extends State<CadastrarFilme> {
                     ),
                   ),
                   ElevatedButton(
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        var filme = Filme(
-                          titulo: _tituloController.text,
-                          urlFilme: _urlDaImagem.text,
-                          genero: _generoController.text,
-                          faixaEtaria: _selectedClassificacao,
-                          rating: _rating,
-                          ano: _anoController.text,
-                          descricao: _descricaoController.text,
-                          duracao: _duracaoController.text,
-                        );
-
-                        var result = await _filmeService.salvarFilme(filme);
-                        if (result != null) {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: Text("Sucesso"),
-                                content: Text("O filme foi criado com sucesso!"),
-                                actions: <Widget>[
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: Text("OK"),
-                                  ),
-                                ],
-                              );
-                            },
-                          ).then((value) {
-                            Navigator.of(context).pop(); // Dar pop na tela
-                          });
-                        }
-                      }
-                    },
-                    child: Text('Cadastrar'),
+                    onPressed: _atualizarFilme,
+                    child: Text('Atualizar'),
                   ),
                 ],
               ),

@@ -34,4 +34,9 @@ class Repository {
     return await connection.query(table, where: 'id = ?', whereArgs: [id]);
   }
 
+  Future<int> updateData(String table, Map<String, dynamic> data, int id) async {
+    var connection = await database;
+    return await connection.update(table, data, where: 'id = ?', whereArgs: [id]);
+  }
+
 }
