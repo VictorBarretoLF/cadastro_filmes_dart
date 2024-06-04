@@ -203,8 +203,8 @@ class _CadastrarFilmeState extends State<CadastrarFilme> {
                           urlFilme: _urlDaImagem.text,
                           genero: _generoController.text,
                           faixaEtaria: _selectedClassificacao,
-                          //rating: _rating,
-                          // ano: _selectedAno ?? _anoController.text,
+                          rating: _rating,
+                          ano: _anoController.text,
                         );
 
                         var result = await _filmeService.salvarFilme(filme);
