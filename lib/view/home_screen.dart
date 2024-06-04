@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:teste/models/filme.dart';
 import 'package:teste/services/filme_service.dart';
 import 'package:teste/view/atualizar_filme.dart';
@@ -173,6 +174,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                 style: TextStyle(
                                   fontSize: 14,
                                 ),
+                              ),
+                              SizedBox(height: 6),
+                              Row(
+                                children: [
+                                  RatingBarIndicator(
+                                    rating: filme.rating,
+                                    itemBuilder: (context, index) => Icon(
+                                      Icons.star,
+                                      color: Colors.amber,
+                                    ),
+                                    itemCount: 5,
+                                    itemSize: 20.0,
+                                    direction: Axis.horizontal,
+                                  ),
+                                ],
                               ),
                             ],
                           ),
