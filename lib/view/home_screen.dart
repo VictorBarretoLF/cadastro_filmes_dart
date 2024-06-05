@@ -76,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Equipe:'),
-          content: Text('Victor Barreto'),
+          content: Text('Victor Barreto, Péricles Henrique Valença Andrade, Ariel de Carvalho Rodrigues, Renato Souza'),
           actions: <Widget>[
             TextButton(
               child: Text('OK'),
